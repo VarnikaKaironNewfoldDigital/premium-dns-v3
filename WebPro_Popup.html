@@ -22,27 +22,45 @@
   .pdns-popup-main-tab.active { color: #0069ff; border-bottom-color: #0069ff; }
   #popup-record-filters .nav {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     list-style: none;
     padding-left: 0;
     margin: 0;
-    gap: 6px;
+    gap: 0;
+    overflow-x: auto;
   }
   #popup-record-filters .tab-heading { margin: 0; }
+  #popup-record-filters .tab-heading + .tab-heading {
+    margin-left: 18px;
+    padding-left: 18px;
+    position: relative;
+  }
+  #popup-record-filters .tab-heading + .tab-heading::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 20px;
+    background: #dbe1ec;
+  }
   #popup-record-filters .filter-link {
     display: inline-block;
-    padding: 8px 10px;
-    font-size: 12px;
-    font-weight: 600;
-    color: #4b5563;
+    padding: 0 0 8px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #2f89ff;
     text-decoration: none;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    background: #fff;
+    border: none;
+    border-radius: 0;
+    background: transparent;
     line-height: 1;
+    font-family: brandon-grotesque, sans-serif;
+    white-space: nowrap;
   }
-  #popup-record-filters .filter-link:hover { color: #111827; border-color: #9ca3af; }
-  #popup-record-filters .filter-link.active { color: #0069ff; border-color: #0069ff; background: #eff6ff; }
+  #popup-record-filters .filter-link:hover { color: #1d4ed8; }
+  #popup-record-filters .filter-link.active { color: #434c5e; border-bottom: 3px solid #2f89ff; }
   #popup-records-list .dns-record-title {
     color: #374151;
     font-weight: 700;
@@ -117,7 +135,7 @@
 
             <!-- Header -->
             <div style="padding: 4px 0 0;">
-                <div class="modal-title" style="font-family: brandon-grotesque, sans-serif;">MANAGE DNS RECORDS</div>
+                <div class="modal-title" style="font-family: brandon-grotesque, sans-serif;">Premium DNS Management</div>
                 <div class="modal-dom-name">For webpropanel.com</div>
             </div>
 
