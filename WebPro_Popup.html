@@ -73,14 +73,21 @@
   .pdns-popup-tab-content.active { display: block; }
 
   /* DNSSEC */
-  .pdns-dnssec-panel { padding: 28px 24px; }
-  .pdns-dnssec-status-row {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 16px 20px; background: #f9fafb;
-    border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 20px;
+  .pdns-dnssec-panel { padding: 20px 24px; }
+  .pdns-dnssec-wrap {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 18px;
+    background: #fff;
   }
-  .pdns-dnssec-label { font-weight: 600; font-size: 14px; color: #111827; }
-  .pdns-dnssec-subdesc { font-size: 12px; color: #6b7280; margin-top: 3px; }
+  .pdns-dnssec-status-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .pdns-dnssec-label { font-weight: 700; font-size: 16px; color: #1f2937; font-family: brandon-grotesque, sans-serif; }
+  .pdns-dnssec-subdesc { font-size: 15px; color: #6b7280; margin-top: 4px; line-height: 1.4; }
   .pdns-toggle { position: relative; width: 44px; height: 24px; display: inline-block; flex-shrink: 0; }
   .pdns-toggle input { display: none; }
   .pdns-toggle-slider {
@@ -91,22 +98,75 @@
     content: ''; position: absolute; width: 18px; height: 18px;
     left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: transform 0.2s;
   }
-  .pdns-toggle input:checked + .pdns-toggle-slider { background: #0069ff; }
+  .pdns-toggle input:checked + .pdns-toggle-slider { background: #f7931e; }
   .pdns-toggle input:checked + .pdns-toggle-slider:before { transform: translateX(20px); }
   .pdns-dnssec-info {
-    font-size: 12.5px; color: #374151; background: #eff6ff;
-    border: 1px solid #bfdbfe; border-radius: 6px; padding: 12px 16px; line-height: 1.6;
+    margin-top: 18px;
+    font-size: 15px;
+    color: #4b5563;
+    line-height: 1.45;
   }
-  .pdns-ds-table-header {
-    display: grid; grid-template-columns: 80px 140px 120px 1fr;
-    gap: 12px; font-size: 11px; color: #6b7280;
-    font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 8px;
+  .pdns-dnssec-section-title {
+    margin-top: 18px;
+    margin-bottom: 8px;
+    font-size: 31px;
+    font-weight: 700;
+    color: #1f2937;
+    font-family: brandon-grotesque, sans-serif;
   }
-  .pdns-ds-table-row {
-    display: grid; grid-template-columns: 80px 140px 120px 1fr;
-    gap: 12px; font-size: 12.5px; color: #111827;
-    background: #f9fafb; border: 1px solid #e5e7eb;
-    border-radius: 6px; padding: 12px 14px;
+  .pdns-dnssec-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+  .pdns-dnssec-card-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #4b5563;
+    margin-bottom: 8px;
+    letter-spacing: 0.03em;
+  }
+  .pdns-dnssec-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 28px;
+  }
+  .pdns-dnssec-key-row { margin-bottom: 8px; }
+  .pdns-dnssec-k {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    color: #9ca3af;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+  .pdns-dnssec-v {
+    font-size: 28px;
+    font-weight: 600;
+    color: #374151;
+    line-height: 1.35;
+    word-break: break-all;
+  }
+  .pdns-key-pill {
+    display: inline-block;
+    font-size: 20px;
+    line-height: 1;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    margin-bottom: 10px;
+  }
+  .pdns-key-pill.ksk {
+    color: #f7931e;
+    border: 1px solid #fbd2a2;
+    background: #fff7ed;
+  }
+  .pdns-key-pill.zsk {
+    color: #2f855a;
+    border: 1px solid #b7e4c7;
+    background: #ecfdf3;
   }
 
   /* Add Record */
@@ -447,34 +507,54 @@
             <!-- ── Tab: DNSSEC Settings ── -->
             <div id="popup-tab-dnssec" class="pdns-popup-tab-content">
                 <div class="pdns-dnssec-panel">
-                    <div class="pdns-dnssec-status-row">
-                        <div>
-                            <div class="pdns-dnssec-label">DNSSEC</div>
-                            <div class="pdns-dnssec-subdesc">Protect your domain from DNS spoofing and cache poisoning</div>
-                        </div>
-                        <label class="pdns-toggle">
-                            <input type="checkbox" id="popup-dnssec-toggle">
-                            <span class="pdns-toggle-slider"></span>
-                        </label>
-                    </div>
-                    <div class="pdns-dnssec-info">
-                        <strong>What is DNSSEC?</strong> Domain Name System Security Extensions (DNSSEC) adds cryptographic
-                        signatures to your DNS records, allowing resolvers to verify their authenticity and protect against
-                        spoofing and cache poisoning attacks.
-                    </div>
-                    <div id="popup-dnssec-records" style="margin-top:24px;display:none;">
-                        <div style="font-weight:600;font-size:13px;margin-bottom:10px;color:#111827;">DS Records</div>
-                        <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:16px;">
-                            <div class="pdns-ds-table-header">
-                                <span>Key Tag</span><span>Algorithm</span><span>Digest Type</span><span>Digest</span>
+                    <div class="pdns-dnssec-wrap">
+                        <div class="pdns-dnssec-status-row">
+                            <div>
+                                <div class="pdns-dnssec-label">DNSSEC Signing</div>
+                                <div class="pdns-dnssec-subdesc">Cryptographically signs your DNS records to prevent spoofing and cache poisoning</div>
                             </div>
-                            <div class="pdns-ds-table-row">
-                                <span>12345</span>
-                                <span>8 (RSA/SHA-256)</span>
-                                <span>2 (SHA-256)</span>
-                                <span style="font-family:monospace;font-size:11px;word-break:break-all;">
-                                    ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890
-                                </span>
+                            <label class="pdns-toggle">
+                                <input type="checkbox" id="popup-dnssec-toggle" checked>
+                                <span class="pdns-toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="pdns-dnssec-info">
+                            Provide these <strong>Delegation Signing (DS) records</strong> to your domain registrar to complete DNSSEC setup. Look for <strong>"DNSSEC"</strong> or <strong>"DS Records"</strong> under your registrar's DNS settings.
+                        </div>
+                        <div id="popup-dnssec-records" style="margin-top:14px;display:block;">
+                            <div class="pdns-dnssec-section-title">DS Record</div>
+                            <div class="pdns-dnssec-card">
+                                <div class="pdns-dnssec-grid">
+                                    <div class="pdns-dnssec-key-row"><div class="pdns-dnssec-k">Key Tag</div><div class="pdns-dnssec-v">5965</div></div>
+                                    <div class="pdns-dnssec-key-row"><div class="pdns-dnssec-k">Algorithm</div><div class="pdns-dnssec-v">8 (RSA/SHA-256)</div></div>
+                                    <div class="pdns-dnssec-key-row"><div class="pdns-dnssec-k">Digest Type</div><div class="pdns-dnssec-v">2 (SHA-256)</div></div>
+                                    <div class="pdns-dnssec-key-row"><div class="pdns-dnssec-k">Last Updated</div><div class="pdns-dnssec-v">2026-04-14 08:35 UTC</div></div>
+                                </div>
+                                <div class="pdns-dnssec-key-row" style="margin-top:8px;">
+                                    <div class="pdns-dnssec-k">Digest</div>
+                                    <div class="pdns-dnssec-v">26B3CC5FE76650A92D6E0FBCFEED8A9308234FBA606127F250AC8435CB69</div>
+                                </div>
+                            </div>
+                            <div class="pdns-dnssec-section-title" style="margin-top:16px;">DNS Keys</div>
+                            <div class="pdns-dnssec-card">
+                                <span class="pdns-key-pill ksk">KSK - KEY SIGNING KEY</span>
+                                <div class="pdns-dnssec-grid">
+                                    <div class="pdns-dnssec-key-row"><div class="pdns-dnssec-k">Key ID</div><div class="pdns-dnssec-v">75211792</div></div>
+                                    <div class="pdns-dnssec-key-row"><div class="pdns-dnssec-k">Type</div><div class="pdns-dnssec-v">257</div></div>
+                                    <div class="pdns-dnssec-key-row"><div class="pdns-dnssec-k">Protocol</div><div class="pdns-dnssec-v">3</div></div>
+                                    <div class="pdns-dnssec-key-row"><div class="pdns-dnssec-k">Algorithm</div><div class="pdns-dnssec-v">8 (RSA/SHA-256)</div></div>
+                                </div>
+                                <div class="pdns-dnssec-key-row" style="margin-top:8px;"><div class="pdns-dnssec-k">Public Key</div><div class="pdns-dnssec-v">AwEAAE+spxaRDAE6jsxKEZLgR3TSNhgMsRZ5zbkxSWnHALDlW55CaSsThjWDwG5EAZ6ia8Vr90djBsHNZO3KyaR5Nb4eJc4SSyNzeFtqBGUD3bajBGs08jWyLARB3Jdc+KfMXebciaCS+4rIR027BS0363/gLf+vH0nvayfIlTmt1AkmrRBHIHjxCnKavEvp7wHyzUeDaxNrjgFYKZ8=</div></div>
+                            </div>
+                            <div class="pdns-dnssec-card">
+                                <span class="pdns-key-pill zsk">ZSK - ZONE SIGNING KEY</span>
+                                <div class="pdns-dnssec-grid">
+                                    <div class="pdns-dnssec-key-row"><div class="pdns-dnssec-k">Key ID</div><div class="pdns-dnssec-v">75211793</div></div>
+                                    <div class="pdns-dnssec-key-row"><div class="pdns-dnssec-k">Type</div><div class="pdns-dnssec-v">256</div></div>
+                                    <div class="pdns-dnssec-key-row"><div class="pdns-dnssec-k">Protocol</div><div class="pdns-dnssec-v">3</div></div>
+                                    <div class="pdns-dnssec-key-row"><div class="pdns-dnssec-k">Algorithm</div><div class="pdns-dnssec-v">8 (RSA/SHA-256)</div></div>
+                                </div>
+                                <div class="pdns-dnssec-key-row" style="margin-top:8px;"><div class="pdns-dnssec-k">Public Key</div><div class="pdns-dnssec-v">AwEAAbhSr6xZ4/hz3JjGTVS//IvuKPlMAYb0aTFkHw/jMS02Oe80tNv/W0+uc78C0CMq3vxmQSeXY08jz3S4bQf4XjbqWi/l9k866YYm8YUcSByqbV4+Xxg9aNrnfm4tZNrjg8hsk300LBYZ4NwrRZtSq5VzmycwKdwgvqaYb08TX</div></div>
                             </div>
                         </div>
                     </div>
