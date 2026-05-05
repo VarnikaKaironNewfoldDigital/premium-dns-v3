@@ -87,6 +87,19 @@
                 <button class="pdns-popup-main-tab" id="popup-tab-btn-dnssec"
                     onclick="switchPopupTab('dnssec')">DNSSEC Settings</button>
             </div>
+            <div id="popup-record-filters">
+                <ul class="nav nav-tabs">
+                    <li role="presentation" class="tab-heading active"><a role="button" href="#" onclick="return false;">ALL RECORDS</a></li>
+                    <li role="presentation" class="tab-heading"><a data-testid="dns-A" role="button" href="#" onclick="return false;">A</a></li>
+                    <li role="presentation" class="tab-heading"><a data-testid="dns-AAAA" role="button" href="#" onclick="return false;">AAAA</a></li>
+                    <li role="presentation" class="tab-heading"><a data-testid="dns-MX" role="button" href="#" onclick="return false;">MX</a></li>
+                    <li role="presentation" class="tab-heading"><a role="button" href="#" onclick="return false;">CNAME</a></li>
+                    <li role="presentation" class="tab-heading"><a role="button" href="#" onclick="return false;">NS</a></li>
+                    <li role="presentation" class="tab-heading"><a role="button" href="#" onclick="return false;">TXT</a></li>
+                    <li role="presentation" class="tab-heading"><a role="button" href="#" onclick="return false;">SRV</a></li>
+                    <li role="presentation" class="tab-heading"><a role="button" href="#" onclick="return false;">SOA</a></li>
+                </ul>
+            </div>
 
             <!-- ── Tab: DNS Records ── -->
             <div id="popup-tab-records" class="pdns-popup-tab-content active">
@@ -143,17 +156,6 @@
                 <!-- Records List -->
                 <div id="popup-records-list" style="max-height: 650px; overflow: hidden scroll;">
                     <div class="dns-panel-scrollable">
-                        <ul class="nav nav-tabs">
-                            <li role="presentation" class="tab-heading active"><a role="button" href="#" onclick="return false;">ALL RECORDS</a></li>
-                            <li role="presentation" class="tab-heading"><a data-testid="dns-A" role="button" href="#" onclick="return false;">A</a></li>
-                            <li role="presentation" class="tab-heading"><a data-testid="dns-AAAA" role="button" href="#" onclick="return false;">AAAA</a></li>
-                            <li role="presentation" class="tab-heading"><a data-testid="dns-MX" role="button" href="#" onclick="return false;">MX</a></li>
-                            <li role="presentation" class="tab-heading"><a role="button" href="#" onclick="return false;">CNAME</a></li>
-                            <li role="presentation" class="tab-heading"><a role="button" href="#" onclick="return false;">NS</a></li>
-                            <li role="presentation" class="tab-heading"><a role="button" href="#" onclick="return false;">TXT</a></li>
-                            <li role="presentation" class="tab-heading"><a role="button" href="#" onclick="return false;">SRV</a></li>
-                            <li role="presentation" class="tab-heading"><a role="button" href="#" onclick="return false;">SOA</a></li>
-                        </ul>
                         <div class="dns-panel-wrap">
                             <div class="dns-record-type">
                                 <div class="dns-record-title">A<span class="dns-record-number">(1)</span></div>
@@ -440,11 +442,13 @@
         document.getElementById('popup-tab-dnssec').classList.toggle('active', !isRecords);
         document.getElementById('popup-tab-btn-records').classList.toggle('active', isRecords);
         document.getElementById('popup-tab-btn-dnssec').classList.toggle('active', !isRecords);
+        document.getElementById('popup-record-filters').style.display = isRecords ? 'block' : 'none';
         if (isRecords) closePopupAddRecord();
     }
     function openPopupAddRecord(type, valueLabel) {
         document.getElementById('popup-add-record-panel').style.display = 'block';
         document.getElementById('popup-records-list').style.display = 'none';
+        document.getElementById('popup-record-filters').style.display = 'none';
         document.getElementById('popup-add-record-title').textContent = 'Add ' + type + ' Record';
         document.getElementById('popup-add-type-input').value = type;
         var lbl = document.getElementById('popup-add-value-label');
@@ -455,6 +459,7 @@
     function closePopupAddRecord() {
         document.getElementById('popup-add-record-panel').style.display = 'none';
         document.getElementById('popup-records-list').style.display = 'block';
+        document.getElementById('popup-record-filters').style.display = 'block';
     }
     document.getElementById('popup-dnssec-toggle').addEventListener('change', function () {
         document.getElementById('popup-dnssec-records').style.display = this.checked ? 'block' : 'none';

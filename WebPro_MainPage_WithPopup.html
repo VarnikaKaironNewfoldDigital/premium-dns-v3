@@ -1530,6 +1530,19 @@
             <button class="pdns-main-tab" id="pdns-tab-btn-dnssec" onclick="switchPdnsTab('dnssec')">DNSSEC Settings</button>
           </div>
         </div>
+        <div id="pdns-record-filters" style="padding:0 24px 0;border-bottom:1px solid #e5e7eb;">
+          <ul class="nav nav-tabs" style="margin:0;border-bottom:none;flex-wrap:wrap;">
+            <li role="presentation" class="tab-heading active"><a role="button" href="#" onclick="return false;">ALL RECORDS</a></li>
+            <li role="presentation" class="tab-heading"><a role="button" href="#" onclick="return false;">A</a></li>
+            <li role="presentation" class="tab-heading"><a role="button" href="#" onclick="return false;">AAAA</a></li>
+            <li role="presentation" class="tab-heading"><a role="button" href="#" onclick="return false;">MX</a></li>
+            <li role="presentation" class="tab-heading"><a role="button" href="#" onclick="return false;">CNAME</a></li>
+            <li role="presentation" class="tab-heading"><a role="button" href="#" onclick="return false;">NS</a></li>
+            <li role="presentation" class="tab-heading"><a role="button" href="#" onclick="return false;">TXT</a></li>
+            <li role="presentation" class="tab-heading"><a role="button" href="#" onclick="return false;">SRV</a></li>
+            <li role="presentation" class="tab-heading"><a role="button" href="#" onclick="return false;">SOA</a></li>
+          </ul>
+        </div>
 
         <!-- ── Tab: DNS Records ── -->
         <div id="pdns-tab-records" class="pdns-tab-content active">
@@ -1586,19 +1599,6 @@
 
           <!-- DNS Records List -->
           <div id="pdns-records-list">
-            <div style="padding:0 24px 0;border-bottom:1px solid #e5e7eb;">
-              <ul class="nav nav-tabs" style="margin:0;border-bottom:none;flex-wrap:wrap;">
-                <li role="presentation" class="tab-heading active"><a role="button" href="#" onclick="return false;">ALL RECORDS</a></li>
-                <li role="presentation" class="tab-heading"><a role="button" href="#" onclick="return false;">A</a></li>
-                <li role="presentation" class="tab-heading"><a role="button" href="#" onclick="return false;">AAAA</a></li>
-                <li role="presentation" class="tab-heading"><a role="button" href="#" onclick="return false;">MX</a></li>
-                <li role="presentation" class="tab-heading"><a role="button" href="#" onclick="return false;">CNAME</a></li>
-                <li role="presentation" class="tab-heading"><a role="button" href="#" onclick="return false;">NS</a></li>
-                <li role="presentation" class="tab-heading"><a role="button" href="#" onclick="return false;">TXT</a></li>
-                <li role="presentation" class="tab-heading"><a role="button" href="#" onclick="return false;">SRV</a></li>
-                <li role="presentation" class="tab-heading"><a role="button" href="#" onclick="return false;">SOA</a></li>
-              </ul>
-            </div>
             <div class="dns-panel-wrap" style="max-height:520px;overflow-y:auto;padding:12px 24px;">
 
               <!-- A -->
@@ -1796,11 +1796,13 @@
         document.getElementById('pdns-tab-dnssec').classList.toggle('active', !isRecords);
         document.getElementById('pdns-tab-btn-records').classList.toggle('active', isRecords);
         document.getElementById('pdns-tab-btn-dnssec').classList.toggle('active', !isRecords);
+        document.getElementById('pdns-record-filters').style.display = isRecords ? 'block' : 'none';
         if (isRecords) closePdnsAddRecord();
       }
       function openPdnsAddRecord(type, valueLabel) {
         document.getElementById('pdns-add-record-panel').style.display = 'block';
         document.getElementById('pdns-records-list').style.display = 'none';
+        document.getElementById('pdns-record-filters').style.display = 'none';
         document.getElementById('pdns-add-record-title').textContent = 'Add ' + type + ' Record';
         document.getElementById('pdns-add-type-input').value = type;
         var lbl = document.getElementById('pdns-add-value-label');
@@ -1811,6 +1813,7 @@
       function closePdnsAddRecord() {
         document.getElementById('pdns-add-record-panel').style.display = 'none';
         document.getElementById('pdns-records-list').style.display = 'block';
+        document.getElementById('pdns-record-filters').style.display = 'block';
       }
       document.getElementById('pdns-dnssec-toggle').addEventListener('change', function() {
         document.getElementById('pdns-dnssec-records').style.display = this.checked ? 'block' : 'none';
