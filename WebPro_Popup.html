@@ -20,6 +20,29 @@
   }
   .pdns-popup-main-tab:hover { color: #374151; }
   .pdns-popup-main-tab.active { color: #0069ff; border-bottom-color: #0069ff; }
+  #popup-record-filters .nav {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+    gap: 6px;
+  }
+  #popup-record-filters .tab-heading { margin: 0; }
+  #popup-record-filters .filter-link {
+    display: inline-block;
+    padding: 8px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #4b5563;
+    text-decoration: none;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: #fff;
+    line-height: 1;
+  }
+  #popup-record-filters .filter-link:hover { color: #111827; border-color: #9ca3af; }
+  #popup-record-filters .filter-link.active { color: #0069ff; border-color: #0069ff; background: #eff6ff; }
   .pdns-popup-tab-content { display: none; }
   .pdns-popup-tab-content.active { display: block; }
 
@@ -89,15 +112,15 @@
             </div>
             <div id="popup-record-filters">
                 <ul class="nav nav-tabs">
-                    <li role="presentation" class="tab-heading active"><a role="button" href="#" onclick="return false;">ALL RECORDS</a></li>
-                    <li role="presentation" class="tab-heading"><a data-testid="dns-A" role="button" href="#" onclick="return false;">A</a></li>
-                    <li role="presentation" class="tab-heading"><a data-testid="dns-AAAA" role="button" href="#" onclick="return false;">AAAA</a></li>
-                    <li role="presentation" class="tab-heading"><a data-testid="dns-MX" role="button" href="#" onclick="return false;">MX</a></li>
-                    <li role="presentation" class="tab-heading"><a role="button" href="#" onclick="return false;">CNAME</a></li>
-                    <li role="presentation" class="tab-heading"><a role="button" href="#" onclick="return false;">NS</a></li>
-                    <li role="presentation" class="tab-heading"><a role="button" href="#" onclick="return false;">TXT</a></li>
-                    <li role="presentation" class="tab-heading"><a role="button" href="#" onclick="return false;">SRV</a></li>
-                    <li role="presentation" class="tab-heading"><a role="button" href="#" onclick="return false;">SOA</a></li>
+                    <li role="presentation" class="tab-heading"><a role="button" class="filter-link active" data-filter="ALL" href="#" onclick="setPopupRecordFilter('ALL'); return false;">ALL RECORDS</a></li>
+                    <li role="presentation" class="tab-heading"><a data-testid="dns-A" role="button" class="filter-link" data-filter="A" href="#" onclick="setPopupRecordFilter('A'); return false;">A</a></li>
+                    <li role="presentation" class="tab-heading"><a data-testid="dns-AAAA" role="button" class="filter-link" data-filter="AAAA" href="#" onclick="setPopupRecordFilter('AAAA'); return false;">AAAA</a></li>
+                    <li role="presentation" class="tab-heading"><a data-testid="dns-MX" role="button" class="filter-link" data-filter="MX" href="#" onclick="setPopupRecordFilter('MX'); return false;">MX</a></li>
+                    <li role="presentation" class="tab-heading"><a role="button" class="filter-link" data-filter="CNAME" href="#" onclick="setPopupRecordFilter('CNAME'); return false;">CNAME</a></li>
+                    <li role="presentation" class="tab-heading"><a role="button" class="filter-link" data-filter="NS" href="#" onclick="setPopupRecordFilter('NS'); return false;">NS</a></li>
+                    <li role="presentation" class="tab-heading"><a role="button" class="filter-link" data-filter="TXT" href="#" onclick="setPopupRecordFilter('TXT'); return false;">TXT</a></li>
+                    <li role="presentation" class="tab-heading"><a role="button" class="filter-link" data-filter="SRV" href="#" onclick="setPopupRecordFilter('SRV'); return false;">SRV</a></li>
+                    <li role="presentation" class="tab-heading"><a role="button" class="filter-link" data-filter="SOA" href="#" onclick="setPopupRecordFilter('SOA'); return false;">SOA</a></li>
                 </ul>
             </div>
 
@@ -445,6 +468,18 @@
         document.getElementById('popup-record-filters').style.display = isRecords ? 'block' : 'none';
         if (isRecords) closePopupAddRecord();
     }
+    function setPopupRecordFilter(filterType) {
+        var normalized = (filterType || 'ALL').toUpperCase();
+        var rows = document.querySelectorAll('#popup-records-list .dns-record-type');
+        rows.forEach(function (row) {
+            var title = row.querySelector('.dns-record-title');
+            var recordType = title ? title.textContent.split('(')[0].trim().toUpperCase() : '';
+            row.style.display = (normalized === 'ALL' || normalized === recordType) ? 'block' : 'none';
+        });
+        document.querySelectorAll('#popup-record-filters .filter-link').forEach(function (link) {
+            link.classList.toggle('active', link.getAttribute('data-filter') === normalized);
+        });
+    }
     function openPopupAddRecord(type, valueLabel) {
         document.getElementById('popup-add-record-panel').style.display = 'block';
         document.getElementById('popup-records-list').style.display = 'none';
@@ -460,6 +495,7 @@
         document.getElementById('popup-add-record-panel').style.display = 'none';
         document.getElementById('popup-records-list').style.display = 'block';
         document.getElementById('popup-record-filters').style.display = 'block';
+        setPopupRecordFilter('ALL');
     }
     document.getElementById('popup-dnssec-toggle').addEventListener('change', function () {
         document.getElementById('popup-dnssec-records').style.display = this.checked ? 'block' : 'none';
