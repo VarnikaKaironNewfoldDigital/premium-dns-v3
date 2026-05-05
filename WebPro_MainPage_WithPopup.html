@@ -1454,51 +1454,28 @@
         color: #0069ff;
         border-bottom-color: #0069ff;
       }
-      #pdns-record-filters .nav {
-        display: flex;
-        flex-wrap: nowrap;
-        list-style: none;
-        padding-left: 0;
-        margin: 0;
-        gap: 0;
-        overflow-x: auto;
+      #pdns-record-filters {
+        padding: 12px 24px;
+        border-bottom: 1px solid #e5e7eb;
       }
-      #pdns-record-filters .tab-heading { margin: 0; }
-      #pdns-record-filters .tab-heading + .tab-heading {
-        margin-left: 18px;
-        padding-left: 18px;
-        position: relative;
-      }
-      #pdns-record-filters .tab-heading + .tab-heading::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 1px;
-        height: 20px;
-        background: #dbe1ec;
-      }
-      #pdns-record-filters .filter-link {
-        display: inline-block;
-        padding: 0 0 8px;
-        font-size: 15px;
-        font-weight: 700;
-        color: #2f89ff;
-        text-decoration: none;
-        border: none;
-        border-radius: 0;
-        background: transparent;
-        line-height: 1;
+      .pdns-filter-label {
+        display: block;
+        font-size: 12px;
+        color: #6b7280;
+        margin-bottom: 6px;
         font-family: brandon-grotesque, sans-serif;
-        white-space: nowrap;
       }
-      #pdns-record-filters .filter-link:hover {
-        color: #1d4ed8;
-      }
-      #pdns-record-filters .filter-link.active {
-        color: #434c5e;
-        border-bottom: 3px solid #2f89ff;
+      .pdns-filter-select {
+        width: 220px;
+        max-width: 100%;
+        height: 36px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        padding: 0 10px;
+        font-size: 14px;
+        color: #111827;
+        background: #fff;
+        font-family: brandon-grotesque, sans-serif;
       }
       #pdns-records-list .dns-record-title {
         color: #374151;
@@ -1597,18 +1574,19 @@
             <button class="pdns-main-tab" id="pdns-tab-btn-dnssec" onclick="switchPdnsTab('dnssec')">DNSSEC Settings</button>
           </div>
         </div>
-        <div id="pdns-record-filters" style="padding:0 24px 0;border-bottom:1px solid #e5e7eb;">
-          <ul class="nav nav-tabs" style="margin:0;border-bottom:none;flex-wrap:wrap;">
-            <li role="presentation" class="tab-heading"><a role="button" class="filter-link active" data-filter="ALL" href="#" onclick="setPdnsRecordFilter('ALL'); return false;">ALL RECORDS</a></li>
-            <li role="presentation" class="tab-heading"><a role="button" class="filter-link" data-filter="A" href="#" onclick="setPdnsRecordFilter('A'); return false;">A</a></li>
-            <li role="presentation" class="tab-heading"><a role="button" class="filter-link" data-filter="AAAA" href="#" onclick="setPdnsRecordFilter('AAAA'); return false;">AAAA</a></li>
-            <li role="presentation" class="tab-heading"><a role="button" class="filter-link" data-filter="MX" href="#" onclick="setPdnsRecordFilter('MX'); return false;">MX</a></li>
-            <li role="presentation" class="tab-heading"><a role="button" class="filter-link" data-filter="CNAME" href="#" onclick="setPdnsRecordFilter('CNAME'); return false;">CNAME</a></li>
-            <li role="presentation" class="tab-heading"><a role="button" class="filter-link" data-filter="NS" href="#" onclick="setPdnsRecordFilter('NS'); return false;">NS</a></li>
-            <li role="presentation" class="tab-heading"><a role="button" class="filter-link" data-filter="TXT" href="#" onclick="setPdnsRecordFilter('TXT'); return false;">TXT</a></li>
-            <li role="presentation" class="tab-heading"><a role="button" class="filter-link" data-filter="SRV" href="#" onclick="setPdnsRecordFilter('SRV'); return false;">SRV</a></li>
-            <li role="presentation" class="tab-heading"><a role="button" class="filter-link" data-filter="SOA" href="#" onclick="setPdnsRecordFilter('SOA'); return false;">SOA</a></li>
-          </ul>
+        <div id="pdns-record-filters">
+          <label class="pdns-filter-label" for="pdns-record-filter-select">Filter record type</label>
+          <select id="pdns-record-filter-select" class="pdns-filter-select" onchange="setPdnsRecordFilter(this.value)">
+            <option value="ALL">ALL RECORDS</option>
+            <option value="A">A</option>
+            <option value="AAAA">AAAA</option>
+            <option value="MX">MX</option>
+            <option value="CNAME">CNAME</option>
+            <option value="NS">NS</option>
+            <option value="TXT">TXT</option>
+            <option value="SRV">SRV</option>
+            <option value="SOA">SOA</option>
+          </select>
         </div>
 
         <!-- ── Tab: DNS Records ── -->
@@ -1874,9 +1852,7 @@
           var recordType = title ? title.textContent.split('(')[0].trim().toUpperCase() : '';
           row.style.display = (normalized === 'ALL' || normalized === recordType) ? 'block' : 'none';
         });
-        document.querySelectorAll('#pdns-record-filters .filter-link').forEach(function(link) {
-          link.classList.toggle('active', link.getAttribute('data-filter') === normalized);
-        });
+        document.getElementById('pdns-record-filter-select').value = normalized;
       }
       function openPdnsAddRecord(type, valueLabel) {
         document.getElementById('pdns-add-record-panel').style.display = 'block';
